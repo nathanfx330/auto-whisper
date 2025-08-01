@@ -1,79 +1,81 @@
-auto_whisper.sh
-Overview
+# 🎙️ Auto Whisper
 
-auto_whisper.sh is a bash script that automatically batches and transcribes all .mp3 audio files in the current directory using OpenAI’s Whisper CLI tool. It outputs transcriptions into a specified folder and supports:
+**Auto Whisper** is a safe, automated Bash script for batch-transcribing `.mp3` files using [OpenAI Whisper](https://github.com/openai/whisper). It safely handles filenames with spaces, special characters, and Unicode symbols by creating a temporary symbolic link during processing — no renaming or moving your files.
 
-    Resuming interrupted transcriptions by skipping already processed files
+---
 
-    Showing progress, including counts and estimated time remaining
+## ✅ Features
 
-    Using GPU acceleration if available
+- 🔐 **Safe filename handling** — avoids Whisper crashes on complex filenames.
+- ⚡ **Skips already-transcribed files** — no reprocessing.
+- 🗂️ Outputs to clean `/output` directory in `.txt`, `.srt`, `.vtt`, and `.json`.
+- ♻️ **Automatic cleanup** — no leftover temp files, even on Ctrl+C.
+- 📊 **Progress tracking** — shows ETA, average time per file, and live status.
 
-    Configurable model, language, and output directory
+---
 
-Requirements
+## 🛠 Requirements
 
-    OpenAI Whisper CLI installed and accessible via whisper command
+- [Whisper CLI](https://github.com/openai/whisper) installed and in your `$PATH`
+- Bash (Linux/macOS)
+- `cuda`-enabled GPU (or change the `--device` flag to `cpu` if needed)
 
-    bash shell (Linux/macOS)
+---
 
-    Optional: NVIDIA GPU with CUDA drivers for GPU acceleration (recommended for speed)
+## 🚀 Usage
 
-Setup
+1. Place `auto_whisper.sh` in the same folder as your `.mp3` files.
+2. Make the script executable:
 
-    Place your .mp3 audio files in the same directory as the script (or adjust the glob pattern in the script if needed).
+   ```bash
+   chmod +x auto_whisper.sh
 
-    Make sure the script is executable:
+    Run it:
 
-    chmod +x auto_whisper.sh
+    ./auto_whisper.sh
 
-    (Optional) Edit the script to customize:
+Output files will be written to the ./output/ directory using the original filenames.
+⚙️ Configuration
 
-        Output folder (OUT_DIR)
+Edit the top of the script to configure behavior:
 
-        Audio file pattern (currently ./*.mp3)
+OUT_DIR="./output"      # Output directory
+FILE_EXT=".mp3"         # File type to process
+TEMP_LINK_NAME="whisper_temp_processing_file"  # Temp symlink name
 
-        Whisper model (e.g., small, base, tiny)
+To support other audio formats (e.g. .wav, .m4a), change FILE_EXT.
+📦 Output Format
 
-        Language (default is English)
+Each processed audio file generates up to four files in the output folder:
 
-        Device (cuda for GPU, cpu for CPU-only)
+    yourfile.txt — plain text transcript
 
-Usage
+    yourfile.srt — subtitles (for videos)
 
-Run the script in the directory with your audio files:
+    yourfile.vtt — web caption format
 
-./auto_whisper.sh
+    yourfile.json — raw Whisper JSON output
 
-The script will:
+🧽 Cleanup
 
-    Scan for all .mp3 files
+All temporary files and symbolic links are automatically removed on script exit — even if interrupted with Ctrl+C.
+💬 Example Output
 
-    Skip files already transcribed (checking for existing transcript files)
+🎧 Detected 12 .mp3 file(s)
+✅ Already processed: 8
+⏳ Remaining to process: 4
 
-    Transcribe new files with Whisper
+➡️  [9/12] Preparing to transcribe: ./Lecture Notes.mp3
+    (Processing as whisper_temp_processing_file.mp3)
+✅ Done: ./Lecture Notes.mp3
+📊 Progress: 9 / 12
+⏱️  Avg/file: 42s | ETA: ~2m
 
-    Save transcripts to the output folder
+🔓 License
 
-    Show real-time progress and estimated time remaining
+MIT License — free for personal and commercial use.
+🙌 Acknowledgments
 
-Customization
+    Built using OpenAI Whisper
 
-Edit these parts inside the script:
-
-OUT_DIR="./output"            # Output directory for transcripts
-ALL_FILES=(./*.mp3)           # Audio file pattern to process
-whisper "$FILE" --language English --model small --output_dir "$OUT_DIR" --device cuda
-                             # Whisper command options
-
-Troubleshooting
-
-    If Whisper fails with an error about the model name, check available models and update --model accordingly.
-
-    If running without GPU, change --device cuda to --device cpu or remove the flag.
-
-    Ensure ffmpeg is installed as Whisper depends on it for audio processing.
-
-License
-
-This script is provided as-is under the MIT License. Modify and use freely.
+    Designed for creators, researchers, archivists, and developers needing a safer Whisper CLI pipeline

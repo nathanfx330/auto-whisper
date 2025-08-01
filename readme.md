@@ -1,7 +1,7 @@
-Auto_Whisper.sh
+auto_whisper.sh
 Overview
 
-Auto_Whisper.sh is a bash script that automatically batches and transcribes all .mp3 audio files in the current directory using OpenAI’s Whisper CLI tool. It outputs transcriptions into a specified folder and supports:
+auto_whisper.sh is a bash script that automatically batches and transcribes all .mp3 audio files in the current directory using OpenAI’s Whisper CLI tool. It outputs transcriptions into a specified folder and supports:
 
     Resuming interrupted transcriptions by skipping already processed files
 
@@ -25,7 +25,7 @@ Setup
 
     Make sure the script is executable:
 
-    chmod +x Auto_Whisper.sh
+    chmod +x auto_whisper.sh
 
     (Optional) Edit the script to customize:
 
@@ -43,7 +43,7 @@ Usage
 
 Run the script in the directory with your audio files:
 
-./Auto_Whisper.sh
+./auto_whisper.sh
 
 The script will:
 
